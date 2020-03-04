@@ -49,7 +49,7 @@ class Upload(object):
 				creds.refresh(Request())
 			else:
 				flow = InstalledAppFlow.from_client_secrets_file(
-					'secrets/credentials.json', SCOPES)
+					'secrets/credentials.json', self.SCOPES)
 				creds = flow.run_local_server(port=0)
 			# Save the credentials for the next run
 			with open('secrets/token.pickle', 'wb') as token:
@@ -79,4 +79,3 @@ class Upload(object):
 			).execute()
 
 		print(uploaded_file.get('id'))
-		
