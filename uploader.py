@@ -15,68 +15,68 @@ from secrets.other import FOLDER_ID
 # https://github.com/googleapis/google-api-python-client
 # https://developers.google.com/docs/api/quickstart/python
 
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = [
-	'https://www.googleapis.com/auth/documents',
-	'https://www.googleapis.com/auth/drive',
-	"https://www.googleapis.com/auth/drive.file"
-	]
 
+class Upload(object):
+	"""
+	An Upload instance; upload a video to the Drive folder
+	specified in secrets.other.FOLDER_ID
+	"""
+	def __init__(self, localPath,baseName):
+		self.localPath = localPath
+		self.baseName = baseName
+		## DRIVE OAUTH SCOPES
+		# If modifying these scopes, delete the file token.pickle.
+		# These OAuth scopes are defined here:
+		# https://developers.google.com/identity/protocols/googlescopes#drivev3
+		self.SCOPES = [
+			'https://www.googleapis.com/auth/documents',
+			'https://www.googleapis.com/auth/drive',
+			"https://www.googleapis.com/auth/drive.file"
+			]
+		self.g_drive = None
 
-FILES = ['file1.txt','file2.txt','file3.txt']
+	def login(self):
+		# Do some login stuff
+		# Return live services for Docs and Drive APIs
+		creds = None
 
-def login():
-	# Do some login stuff
-	# Return live services for Docs and Drive APIs
-	creds = None
+		if os.path.exists('secrets/token.pickle'):
+			with open('secrets/token.pickle', 'rb') as token:
+				creds = pickle.load(token)
+		# If there are no (valid) credentials available, let the user log in.
+		if not creds or not creds.valid:
+			if creds and creds.expired and creds.refresh_token:
+				creds.refresh(Request())
+			else:
+				flow = InstalledAppFlow.from_client_secrets_file(
+					'secrets/credentials.json', SCOPES)
+				creds = flow.run_local_server(port=0)
+			# Save the credentials for the next run
+			with open('secrets/token.pickle', 'wb') as token:
+				pickle.dump(creds, token)
 
-	if os.path.exists('secrets/token.pickle'):
-		with open('secrets/token.pickle', 'rb') as token:
-			creds = pickle.load(token)
-	# If there are no (valid) credentials available, let the user log in.
-	if not creds or not creds.valid:
-		if creds and creds.expired and creds.refresh_token:
-			creds.refresh(Request())
-		else:
-			flow = InstalledAppFlow.from_client_secrets_file(
-				'secrets/credentials.json', SCOPES)
-			creds = flow.run_local_server(port=0)
-		# Save the credentials for the next run
-		with open('secrets/token.pickle', 'wb') as token:
-			pickle.dump(creds, token)
+		try:
+			self.g_drive = build('drive','v3',credentials=creds)
+		except:
+			print("LOGIN ERROR")
 
-	g_drive = build('drive','v3',credentials=creds)
-
-	return g_drive
-
-
-
-def insert_request(insertList,service,docID):
-	service.documents().batchUpdate(
-		documentId=docID,
-		body={'requests':insertList}
-		).execute()
-
-
-
-
-def main():
-	g_drive = login()
-
-	for _file in FILES:
+	def load_it(self):
 		file_metadata = {
-		'name': _file,
-		'parents': [FOLDER_ID]
-		}
-		media = MediaFileUpload(_file,
-			mimetype='text/plain',
+			'name': self.baseName,
+			'parents': [FOLDER_ID]
+			}
+		media = MediaFileUpload(
+			self.localPath,
+			mimetype='video/mp4',
 			resumable=True)
 		print(file_metadata)
-		uploaded_file = g_drive.files().create(body=file_metadata,
-												media_body=media,
-												fields='id',
-												supportsAllDrives=True).execute()
-		print(uploaded_file.get('id'))
+		
+		uploaded_file = self.g_drive.files().create(
+			body=file_metadata,
+			media_body=media,
+			fields='id',
+			supportsAllDrives=True
+			).execute()
 
-if __name__ == '__main__':
-	main()
+		print(uploaded_file.get('id'))
+		
