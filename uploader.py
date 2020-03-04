@@ -60,7 +60,7 @@ class Upload(object):
 		except:
 			print("LOGIN ERROR")
 
-	def load_it(self):
+	def upload_it(self):
 		file_metadata = {
 			'name': self.baseName,
 			'parents': [FOLDER_ID]
