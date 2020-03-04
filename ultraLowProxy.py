@@ -49,6 +49,12 @@ class Migration:
 		uploading_file.login()
 		uploading_file.upload_it()
 
+	def delete_me(self):
+		try:
+			os.path.remove(self.outPath)
+		except:
+			print("\n\n**\n\ncouldn't delete "+self.outPath)
+
 def main(batchPath,outDir):
 	for root, dirs, _ in os.walk(batchPath):
 		for _dir in dirs:
@@ -61,6 +67,7 @@ def main(batchPath,outDir):
 						)
 					migrate.transcode()
 					migrate.upload()
+					migrate.delete_me()
 
 if __name__ == "__main__":
 	main(sys.argv[1],sys.argv[2])
