@@ -1,0 +1,4 @@
+.DS_*
+__py*
+secrets/*
+!secrets/sample_*
