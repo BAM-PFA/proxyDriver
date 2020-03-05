@@ -39,7 +39,7 @@ class Migration:
 			"aac",
 			"-movflags",
 			"+faststart",
-			self.outPath
+			self.f
 			]
 		output = subprocess.run(command,stdout=subprocess.PIPE)
 		print(output.stdout)
