@@ -5,7 +5,7 @@ We needed to share a bunch of super low resolution proxy files of videos with co
 
 ## Usage
 
-`python2 ultraLowProxy /path/to/folder/with/subfolders/and/videos/ /path/to/temp/output/`
+`python2 ultraLowProxy /path/to/test_videos/ /path/to/test_videos_outdir/`
 
 The `ultraLowProxy` script expects an `inputPath` that contains one or more directories with `.mp4` files in them, and an `outputPath` where the proxy files can be stored temporarily. `other.py` expects the `FOLDER_ID` variable to be the ID (i.e., the last part of the URL, like of a Google Drive folder where you want the files stored. This should be set and changed manually as needed. 
 
