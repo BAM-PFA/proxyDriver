@@ -61,7 +61,7 @@ def main():
 
 	if not mimeType == 'video/mp4':
 		with open('mimetypes.json','r') as f:
-			mtypes = json.load(s)
+			mtypes = json.load(f)
 		mimeType = mtypes[mimeType]
 
 	if mode == 'proxy':

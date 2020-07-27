@@ -27,7 +27,7 @@ class Upload(object):
 		mimeType='video/mp4',
 		folderAlt=None):
 		self.localPath = localPath
-		self.baseName = mbaseName
+		self.baseName = baseName
 		self.mimeType = mimeType
 		if folderAlt:
 			self.parents = [folderAlt]
@@ -76,7 +76,7 @@ class Upload(object):
 			}
 		media = MediaFileUpload(
 			self.localPath,
-			mimeType=self.mimeType,
+			mimetype=self.mimeType,
 			resumable=True)
 		print(file_metadata)
 		
