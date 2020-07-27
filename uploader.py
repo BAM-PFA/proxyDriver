@@ -21,9 +21,18 @@ class Upload(object):
 	An Upload instance; upload a video to the Drive folder
 	specified in secrets.other.FOLDER_ID
 	"""
-	def __init__(self, localPath,baseName):
+	def __init__(self,
+		localPath=None,
+		baseName=None,
+		mimeType='video/mp4',
+		folderAlt=None):
 		self.localPath = localPath
-		self.baseName = baseName
+		self.baseName = mbaseName
+		self.mimeType = mimeType
+		if folderAlt:
+			self.parents = [folderAlt]
+		else:
+			self.parents = [FOLDER_ID]
 		## DRIVE OAUTH SCOPES
 		# If modifying these scopes, delete the file token.pickle.
 		# These OAuth scopes are defined here:
@@ -63,11 +72,11 @@ class Upload(object):
 	def upload_it(self):
 		file_metadata = {
 			'name': self.baseName,
-			'parents': [FOLDER_ID]
+			'parents': self.parents
 			}
 		media = MediaFileUpload(
 			self.localPath,
-			mimetype='video/mp4',
+			mimeType=self.mimeType,
 			resumable=True)
 		print(file_metadata)
 		

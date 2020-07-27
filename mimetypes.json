@@ -1,0 +1,6 @@
+mimeTypes = {
+	"mp4":"video/mp4",
+	"prores":"video/quicktime",
+	"quicktime":"video/quicktime",
+	"mp3":"audio/mp3"
+}

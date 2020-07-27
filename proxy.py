@@ -3,13 +3,10 @@ import subprocess
 import sys
 from uploader import Upload
 
-# INPATH SHOULD BE /PATH/TO/Video_Deliverables
-# OUTPATH SHOULD BE A DIR FOR EACH PRODUCTION (WLTVS,4MY,GFA)
-
 class Migration:
 	'''
 	Instance of a migration:
-	transocde a low res proxy file, 
+	transocde a low res proxy file,
 	then upload it to Drive
 	'''
 	def __init__(
@@ -18,12 +15,12 @@ class Migration:
 		inPath,
 		outDir
 		):
-		
+
 		self.baseName = baseName
 		self.inPath = inPath
 		self.outDir = outDir
 		self.outPath = os.path.join(outDir,baseName)
-		
+
 	def transcode(self):
 		command = [
 			"ffmpeg",
@@ -54,20 +51,3 @@ class Migration:
 			os.path.remove(self.outPath)
 		except:
 			print("\n\n**\n\ncouldn't delete "+self.outPath)
-
-def main(batchPath,outDir):
-	for root, dirs, _ in os.walk(batchPath):
-		for _dir in dirs:
-			for _file in os.listdir(os.path.join(root,_dir)):
-				if _file.endswith('.mp4'):
-					migrate = Migration(
-						_file,
-						os.path.join(root,_dir,_file),
-						outDir
-						)
-					migrate.transcode()
-					migrate.upload()
-					migrate.delete_me()
-
-if __name__ == "__main__":
-	main(sys.argv[1],sys.argv[2])
